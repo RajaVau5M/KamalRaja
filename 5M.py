@@ -21,70 +21,54 @@ from random import randint as rr
 from concurrent.futures import ThreadPoolExecutor as tred
 from os import system
 from datetime import datetime
-import os
-import time
-import os
-import time
+
+# ===== YOUTUBE SUBSCRIPTION ENFORCEMENT =====
+def youtube_subscription_check():
+    os.system('clear')
+    print("\033[1;33m=================================================\033[0m")
+    print("\033[1;32m       🔔 YOUTUBE SUBSCRIPTION REQUIRED 🔔       \033[0m")
+    print("\033[1;33m=================================================\033[0m")
+    print("\033[1;36m[•] Opening YouTube Channel... Please Subscribe to continue!\033[0m")
+    
+    yt_link = "https://www.youtube.com/@reality-voice_king_kamal"
+    yt_cmd = f"am start -a android.intent.action.VIEW -d '{yt_link}' >/dev/null 2>&1 || termux-open-url '{yt_link}'"
+    os.system(yt_cmd)
+    
+    time.sleep(3)
+    
+    while True:
+        print("\n\033[1;33m-------------------------------------------------\033[0m")
+        sub = input("\033[1;36m[?] Have you subscribed to the YouTube channel? (y/n): \033[0m").strip().lower()
+        
+        if sub in ['y', 'yes']:
+            print("\n\033[1;32m[✓] Thank you for subscribing! Starting tool...\033[0m")
+            time.sleep(2)
+            break
+        else:
+            print("\n\033[1;31m[×] Access Denied! You must subscribe to the YouTube channel to use this tool.\033[0m")
+            print("\033[1;33m[•] Opening YouTube link again...\033[0m")
+            os.system(yt_cmd)
+            time.sleep(2)
 
 
-import os
-import time
-
-# WhatsApp Channel Section
+# WhatsApp Channel / Group Section
 channel_link = "https://chat.whatsapp.com/Br0KVWVikGD4hps8FuBl6Z?s=cl&p=a&mlu=4&ilr=4"
 os.system(f"echo '{channel_link}' | termux-clipboard-set 2>/dev/null")
-print(" \x1b[1;32m[+] WhatsApp Link Copied to Clipboard!")
-print(" \x1b[1;36m[*] Opening WhatsApp...")
-os.system(f"termux-open-url '{channel_link}'")
 
-time.sleep(3)
-
-# YouTube Channel Section (Fixed URL & Deep Linking)
-yt_handle = "@reality-voice_king_kamal"
-yt_link = f"https://www.youtube.com/{yt_handle}/"
-
-print(" \x1b[1;32m[+] Opening YouTube Channel... Please Subscribe!")
-
-# Try opening in YouTube App directly, fallback to Browser URL
-yt_cmd = f"am start -a android.intent.action.VIEW -d '{yt_link}' >/dev/null 2>&1 || termux-open-url '{yt_link}'"
-os.system(yt_cmd)
-
-time.sleep(2)
-
-# ===== IMPORTS =====
-import os
-import requests
-import platform
-import uuid
-import time
-import sys
-
-# ===== LICENSE SYSTEM =====
-LICENSE_SERVER = "https://ripon-mango-server.onrender.com/check-key"
-APP_ID = "KAMAL-TOOL"
-KEY_FILE = os.path.expanduser("~/.kamal_key.txt")
-whatsapp_number = "8801755077702"
-
+# ===== DEVICE & SYSTEM FUNCTIONS =====
 def get_hwid():
     hwid_file = os.path.expanduser("~/.kamal_hwid.txt")
-
     try:
         if os.path.exists(hwid_file):
             with open(hwid_file, "r") as f:
                 saved_hwid = f.read().strip()
-
             if saved_hwid:
                 return saved_hwid
-
-        # First run: create a stable local HWID
         import secrets
         new_hwid = str(secrets.randbits(63))
-
         with open(hwid_file, "w") as f:
             f.write(new_hwid)
-
         return new_hwid
-
     except Exception:
         return "KAMAL-" + str(abs(hash(os.path.expanduser("~"))))
 
@@ -93,11 +77,9 @@ def get_device_model():
     try:
         brand = os.popen("getprop ro.product.brand").read().strip()
         model = os.popen("getprop ro.product.model").read().strip()
-
         if brand and model:
             return f"{brand} {model}"
         return model or brand or platform.machine()
-
     except Exception:
         return platform.machine()
 
@@ -114,27 +96,19 @@ def get_live_version():
     return "1.0.0"
 
 
-from datetime import datetime
-
 def calculate_time_left(expiry_str):
     if not expiry_str or expiry_str.lower() == "lifetime":
         return "Lifetime"
-
     try:
         expiry = datetime.strptime(expiry_str, "%Y-%m-%d %H:%M:%S")
         now = datetime.now()
-
         remaining = expiry - now
-
         if remaining.total_seconds() <= 0:
             return "Expired"
-
         days = remaining.days
         hours, remainder = divmod(remaining.seconds, 3600)
         minutes, _ = divmod(remainder, 60)
-
         return f"{days}d {hours}h {minutes}m"
-
     except Exception:
         return str(expiry_str)
 
@@ -142,186 +116,19 @@ def calculate_time_left(expiry_str):
 # ===== WHATSAPP GROUP =====
 WHATSAPP_GROUP = "https://chat.whatsapp.com/Br0KVWVikGD4hps8FuBl6Z?s=cl&p=a&mlu=4&ilr=4"
 
-def open_whatsapp(customer_name):
+def open_whatsapp():
     try:
-        os.system(
-            f'am start -a android.intent.action.VIEW -d "{WHATSAPP_GROUP}"'
-        )
+        os.system(f'am start -a android.intent.action.VIEW -d "{WHATSAPP_GROUP}"')
     except Exception as e:
         print(f"[×] WhatsApp error: {e}")
 
 
-# ===== LICENSE CHECK =====
-
-def check_key():
-    LICENSE_SERVER = "https://ripon-mango-server.onrender.com/check-key"
-
-    saved_key_files = [
-    KEY_FILE
-]
-
-    user_hwid = get_hwid()
-    user_key = None
-    key_data = None
-
-    def verify_key(key):
-        payload = {
-            "key": key.strip().upper(),
-            "app_id": "KAMAL-TOOL",
-            "hwid": user_hwid,
-            "device_model": get_device_model(),
-            "android_version": get_android_version(),
-            "app_version": get_live_version()
-        }
-
-        try:
-            response = None
-            last_error = None
-            for attempt in range(1, 4):
-                try:
-                    response = requests.post(
-                        LICENSE_SERVER,
-                        json=payload,
-                        timeout=(10, 30)
-                    )
-                    if response.status_code == 403:
-                        try:
-                            error_data = response.json()
-                            return None, error_data.get(
-                                "message",
-                                "License denied."
-                            )
-                        except Exception:
-                            return None, "License denied by server."
-                    if response.status_code >= 500 and attempt < 3:
-                        time.sleep(2 * attempt)
-                        continue
-                    response.raise_for_status()
-                    break
-                except (requests.exceptions.Timeout,
-                        requests.exceptions.ConnectionError) as exc:
-                    last_error = exc
-                    if attempt < 3:
-                        print(f"[!] Server/network retry {attempt}/2...")
-                        time.sleep(2 * attempt)
-                        continue
-                    raise
-            if response is None:
-                raise last_error or RuntimeError("License server did not respond")
-
-            try:
-                result = response.json()
-            except Exception:
-                return None, "Invalid server response."
-
-            if response.status_code == 200 and result.get("ok") is True:
-                return result, None
-
-            return None, result.get(
-                "message",
-                "License verification failed."
-            )
-
-        except requests.exceptions.RequestException as e:
-            return None, f"Connection error: {e}"
-
-    for path in saved_key_files:
-        if os.path.exists(path):
-            try:
-                with open(path, "r") as f:
-                    saved_key = f.read().strip().upper()
-
-                if saved_key:
-                    result, error = verify_key(saved_key)
-
-                    if result:
-                        user_key = saved_key
-                        key_data = result
-                        break
-                    else:
-                        print(f"\n[×] Saved key verification failed: {error}")
-            except Exception:
-                pass
-
-    if not key_data:
-        for path in saved_key_files:
-            if os.path.exists(path):
-                try:
-                    os.remove(path)
-                except Exception:
-                    pass
-
-        os.system("clear")
-
-        print("\n\033[1;33m[!] ACCESS DENIED\033[0m")
-        print("\033[1;33mTHIS TOOL IS TOTALLY PAID!\033[0m")
-
-        customer_name = input(
-            "\033[1;33m[?] Enter Your Name: \033[0m"
-        ).strip().upper()
-
-        if not customer_name:
-            customer_name = "USER"
-
-        print(
-            "\n\033[1;32m[•] Opening WhatsApp to request paid key...\033[0m"
-        )
-
-        time.sleep(1)
-        open_whatsapp(customer_name)
-
-        user_key = input(
-            "\n\033[1;36m[?] Enter Your Paid Key: \033[0m"
-        ).strip().upper()
-
-        if not user_key:
-            print(
-                "\n\033[1;31m[×] Key cannot be empty.\033[0m"
-            )
-            time.sleep(2)
-            sys.exit()
-
-        result, error = verify_key(user_key)
-
-        if not result:
-            print(
-                f"\n\033[1;31m[×] {error}\033[0m"
-            )
-            time.sleep(2)
-            sys.exit()
-
-        key_data = result
-
-        for path in saved_key_files:
-            try:
-                with open(path, "w") as f:
-                    f.write(user_key)
-            except Exception:
-                pass
-
-    try:
-        record_user_daily_usage(user_key)
-    except Exception:
-        pass
-
-    return (
-        key_data.get("name", "USER"),
-        user_key,
-        key_data.get("expiry", "Lifetime")
-    )
-
 def hold_screen_10_seconds():
     print()
     print("[*] Starting in 10 seconds...")
-
     for i in range(10, 0, -1):
-        print(
-            f"\r[*] Starting in {i} seconds...",
-            end="",
-            flush=True
-        )
+        print(f"\r[*] Starting in {i} seconds...", end="", flush=True)
         time.sleep(1)
-
     print()
 
 
@@ -335,27 +142,6 @@ def display_welcome_banner(user_name, user_key, remaining_time):
     print(f"[+] Expiry : {remaining_time}")
     print("=" * 45)
 
-
-if __name__ == "__main__":
-    result = check_key()
-
-    if result:
-        user_name, user_key, expiry_str = result
-        remaining_time = calculate_time_left(expiry_str)
-
-        display_welcome_banner(
-            user_name,
-            user_key,
-            remaining_time
-        )
-
-        hold_screen_10_seconds()
-
-        print(
-            "\033[1;32m"
-            "[✓] Main Tool Started Successfully!"
-            "\033[0m"
-        )
 
 # Initial setup and promotion
 os.system('clear')
@@ -485,18 +271,18 @@ def show_branding():
     
     print("""\033[1;32m
 ╔═════════════════════════════════════════════════╗
-║ ███╗   ███╗ █████╗ ███╗   ██╗ ██████╗  ██████╗  ║
-║ ████╗ ████║██╔══██╗████╗  ██║██╔════╝ ██╔═══██╗ ║
-║ ██╔████╔██║███████║██╔██╗ ██║██║  ███╗██║   ██║ ║
-║ ██║╚██╔╝██║██╔══██║██║╚██╗██║██║   ██║██║   ██║ ║
-║ ██║ ╚═╝ ██║██║  ██║██║ ╚████║╚██████╔╝╚██████╔╝ ║
-║ ╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝ ╚═════╝  ╚═════╝  ║
+║ ██╗  ██╗ █████╗ ███╗   ███╗ █████╗ ██╗         ║
+║ ██║  ██║██╔══██╗████╗ ████║██╔══██╗██║         ║
+║ ███████║███████║██╔████╔██║███████║██║         ║
+║ ██╔══██║██╔══██║██║╚██╔╝██║██╔══██║██║         ║
+║ ██║  ██║██║  ██║██║ ╚═╝ ██║██║  ██║███████╗      ║
+║ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝      ║
 ║              🔥 𝐊𝐀𝐌𝐀𝐋 🔥                       ║
 ╚═════════════════════════════════════════════════╝\033[1;97m""")
     print("\033[1;97m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
     print("\x1b[38;5;46m[\033[1;97m=\x1b[38;5;46m] \033[1;97mOWNER      \x1b[38;5;46m:  \033[1;97m𝐊𝐀𝐌𝐀𝐋")
     print("\x1b[38;5;46m[\033[1;97m=\x1b[38;5;46m] \033[1;97mTOOL       \x1b[38;5;46m:  \033[1;97mKaMal5M")
-    print("\x1b[38;5;46m[\033[1;97m=\x1b[38;5;46m] \033[1;97mSTATUS     \x1b[38;5;46m:  \033[1;97mPREMIUM")
+    print("\x1b[38;5;46m[\033[1;97m=\x1b[38;5;46m] \033[1;97mSTATUS     \x1b[38;5;46m:  \033[1;97mFREE & SECURE")
     print("\033[1;97m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m")
 
 def ____banner____():
@@ -568,7 +354,7 @@ def main_menu():
     else:
         print(f"\n    {rad}Choose Valid Option... ")
         time.sleep(2)
-        BNG_71_()
+        main_menu()
 
 
 def old_clone():
@@ -633,7 +419,7 @@ def old_Tow():
     linex()
     ____banner____()
     print(f"       \x1b[38;5;196m(\x1b[1;37m★\x1b[38;5;196m)\x1b[1;37m>\x1b[38;5;196m×\x1b[1;37m<\033[1;97mEXAMPLE {Y}:{G} 20000 / 30000 / 99999")
-    limit = input(f"       \x1b[38;5;196m(\x1b[1;37m★\x1b[38;5;196m)\x1b[1;37m\x1b[38;5;196m\x1b[1;37m\033[1;97mSELECT {Y}:{G} ")
+    limit = input(f"       \x1b[38;5;196m(\x1b[1;37m★\x1b[38;5;196m)\x1b[1;37m>\x1b[38;5;196m×\x1b[1;37m<\033[1;97mSELECT {Y}:{G} ")
     linex()
     prefixes = ['100003', '100004']
     for _ in range(int(limit)):
@@ -757,7 +543,7 @@ def login_1(uid):
 
 
 def login_2(uid):
-    sys.stdout.write(f"\r\r\x1b[1;37m\x1b[38;5;196m+\x1b[1;37m\x1b[38;5;196m(\x1b[1;37mKAMAL-M2\x1b[38;5;196m)\x1b[1;37m\x1b[38;5;196m\x1b[1;37m\x1b[38;5;196m(\x1b[38;5;192m{loop}\x1b[38;5;196m)\x1b[1;37m\x1b[38;5;196m\x1b[1;37m\x1b[38;5;196m(\x1b[1;37mOK\x1b[38;5;196m)\x1b[1;37m\x1b[38;5;196m\x1b[1;37m\x1b[38;5;196m(\x1b[38;5;192m{len(oks)}\x1b[38;5;196m)")
+    sys.stdout.write(f"\r\r\x1b[1;37m\x1b[38;5;196m+\x1b[1;37m\x1b[38;5;196m(\x1b[1;37mKAMAL-M2\x1b[38;5;196m)\x1b[1;37m\x1b[38;5;196m\x1b[1;37m\x1b[38;5;196m(\x1b[1;37mOK\x1b[38;5;196m)\x1b[1;37m\x1b[38;5;196m\x1b[1;37m\x1b[38;5;196m(\x1b[38;5;192m{len(oks)}\x1b[38;5;196m)")
     
     for pw in ('123456', '123123', '1234567', '12345678', '123456789'):
         try:
@@ -789,25 +575,11 @@ def login_2(uid):
     loop += 1
 
 if __name__ == "__main__":
-    result = check_key()
-
-    if not result:
-        raise SystemExit
-
-    user_name, user_key, expiry_str = result
-    remaining_time = calculate_time_left(expiry_str)
-
-    display_welcome_banner(
-        user_name,
-        user_key,
-        remaining_time
-    )
-
-    hold_screen_10_seconds()
-
-    print(
-        "\033[1;32m"
-        "[✓] Main Tool Started Successfully!"
-        "\033[0m"
-    )
+    # Run YouTube Subscription check first
+    youtube_subscription_check()
+    
+    # Open WhatsApp group automatically on start
+    open_whatsapp()
+    
+    # Start main menu
     main_menu()
