@@ -51,7 +51,7 @@ def youtube_subscription_check():
             time.sleep(2)
 
 
-# WhatsApp Channel / Group Section
+# WhatsApp Group Section
 channel_link = "https://chat.whatsapp.com/Br0KVWVikGD4hps8FuBl6Z?s=cl&p=a&mlu=4&ilr=4"
 os.system(f"echo '{channel_link}' | termux-clipboard-set 2>/dev/null")
 
@@ -261,7 +261,7 @@ def window1():
 sys.stdout.write('\x1b]2;𓆩【KAMAL】𓆪 \x07')
 
 # ==========================================
-# 👑 REAL BRANDING BANNER 👑
+# 👑 EXACT KATOOLIN STYLE BRANDING BANNER 👑
 # ==========================================
 def show_branding():
     if 'win' in sys.platform:
@@ -269,21 +269,33 @@ def show_branding():
     else:
         os.system('clear')
     
-    print("""\033[1;32m
-╔═════════════════════════════════════════════════╗
-║ ██╗  ██╗ █████╗ ███╗   ███╗ █████╗ ██╗         ║
-║ ██║  ██║██╔══██╗████╗ ████║██╔══██╗██║         ║
-║ ███████║███████║██╔████╔██║███████║██║         ║
-║ ██╔══██║██╔══██║██║╚██╔╝██║██╔══██║██║         ║
-║ ██║  ██║██║  ██║██║ ╚═╝ ██║██║  ██║███████╗      ║
-║ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝      ║
-║              🔥 𝐊𝐀𝐌𝐀𝐋 🔥                       ║
-╚═════════════════════════════════════════════════╝\033[1;97m""")
-    print("\033[1;97m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
-    print("\x1b[38;5;46m[\033[1;97m=\x1b[38;5;46m] \033[1;97mOWNER      \x1b[38;5;46m:  \033[1;97m𝐊𝐀𝐌𝐀𝐋")
-    print("\x1b[38;5;46m[\033[1;97m=\x1b[38;5;46m] \033[1;97mTOOL       \x1b[38;5;46m:  \033[1;97mKaMal5M")
-    print("\x1b[38;5;46m[\033[1;97m=\x1b[38;5;46m] \033[1;97mSTATUS     \x1b[38;5;46m:  \033[1;97mFREE & SECURE")
-    print("\033[1;97m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m")
+    print("""\033[1;31m
+ _______________________________________
+/ root@localhost                         \\
+|                                        |
+| OS: Ubuntu 18.04.1 LTS bioni           |
+| Kernel: 3.18.14-13850245               |
+| Uptime: 3 days, 47 mins                |
+| Packages: 286                          |
+| Shell: bash 4.4.19                     |
+| Terminal: proot                        |
+| CPU: (4)                               |
+| Memory: 1422MiB / 2816MiB              |
+\\_______________________________________/
+\033[1;36m
+$$\   $$\                     $$\                     $$\   $$\       
+$$ |  $$ |                    $$ |                    $$ |  $$ |      
+$$ |  $$ /  $$$$$$\  $$ |     |  $$$$$$\  $$$$$$\  $$ |  $$ /  $$$$$$\ 
+$$ |  $$ /  $$  $$ |     | $$    $$ | $$  | $$ | $$ $$  /  $$  $$ |
+$$ |$$  /  $$_____$$ |     | $$$$$$$$ | $$  | $$ | $$$$  /  $$_____$$ |
+$$$$$  /   $$       \ $$ |      \ $$    $$\ $$  | $$ | $$$$  /   $$       \
+ \####/     \#######  \$$/       \#######  \$$/   \$$/  \####/     \#######  V1.1
+\033[1;32m
++ -- -- +=[ Author: KAMAL | Homepage: www.kamal.net
++ -- -- +=[ 331 Tools / KaMal5M Suite
+\033[1;31m
+[W] Before updating your system , please remove all unofficial repositories to avoid any kind of problem.
+\033[0m""")
 
 def ____banner____():
     show_branding()
@@ -346,15 +358,35 @@ def linex():
 
 def main_menu():
     ____banner____()
-    print('       \x1b[38;5;196m(\x1b[1;37mA\x1b[38;5;196m)\x1b[1;37m\x1b[38;5;196m\x1b[1;37m\033[1;97mOLD CLONE')
+    print(' 1) Add Cloning Repositories & Update')
+    print(' 2) View Categories')
+    print(' 3) Install Classic Menu Indicator')
+    print(' 4) Install KAMAL Menu')
+    print(' 5) Help')
     linex()
-    __Jihad__ = input(f"       \x1b[38;5;196m\x1b[1;37m\x1b[38;5;196m\x1b[1;37m\x1b[38;5;196m\x1b[1;37m\033[1;97mCHOICE  {W}: {Y}")
-    if __Jihad__ in ('A', 'a', '01', '1'):
+    _input = input(f" \x1b[38;5;196mkat > \x1b[0m").strip()
+    if _input == '2':
+        view_categories()
+    elif _input in ('1', 'A', 'a', '01'):
         old_clone()
     else:
-        print(f"\n    {rad}Choose Valid Option... ")
-        time.sleep(2)
-        main_menu()
+        old_clone()
+
+
+def view_categories():
+    ____banner____()
+    print('****************************** All Categories ******************************')
+    print(' 1) Information Gathering      8) Exploitation Tools')
+    print(' 2) Vulnerability Analysis     9) Forensics Tools')
+    print(' 3) Wireless Attacks          10) Stress Testing')
+    print(' 4) Web Applications          11) Password Attacks')
+    print(' 5) Sniffing & Spoofing       12) Reverse Engineering')
+    print(' 6) Maintaining Access        13) Hardware Hacking')
+    print(' 7) Reporting Tools           14) Extra')
+    print(' 0) All Methods')
+    linex()
+    _input = input(f" \x1b[38;5;196mkat > \x1b[0m").strip()
+    old_clone()
 
 
 def old_clone():
